@@ -3,7 +3,6 @@ import re
 
 randomNumber = str(random.randint(1000, 9999))
 print("Welcome to the Cows and Bulls Game!")
-print("Random Number " + randomNumber)
 
 def inputNumber():
   playerInput = input("Enter a 4 digit number: ")
