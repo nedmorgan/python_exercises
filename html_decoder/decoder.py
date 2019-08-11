@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
-import sys
+import simplejson as json
 
-# This is the url that I was to scrape
+# This is the url that I want to scrape
 page_link = 'https://www.nytimes.com/'
 
 # This will fetch the contents of the wepage
@@ -12,22 +12,34 @@ page_response = requests.get(page_link, timeout=5)
 page_content = BeautifulSoup(page_response.content, "html.parser")
 
 headerContent = []
-for i in range(0, 27):
+for i in range(0, 32):
     headers = page_content.find_all("h2")[i].text
-    headerContent.append(headers)
+    headerContent.append({"header": headers})
 
 listItems = []
-for i in range(0, 195):
+for i in range(0, 201):
   items = page_content.find_all("li")[i].text
   listItems.append(items)
 
-def printItems():
-  print("There are all the headers: ")
-  for index, i in enumerate(headerContent, start = 1):
-    print(str(index) + ": " + str(i))
-  print("There are all the list content items: ")
-  for index, i in enumerate(listItems, start = 1):
-    print(str(index) + ": " + str(i))
+def set_default(obj):
+  if isinstance(obj, set):
+      return list(obj)
+  raise TypeError
 
-printItems()
+data = json.dumps({'headers': headerContent}, separators=(',', ':'), indent=4 * ' ', default=set_default)
+
+with open('data.json', 'w') as fp:
+    json.dump(data, fp)
+
+# print(headerContent)
+
+# def printItems():
+#   print("There are all the headers: ")
+#   for index, i in enumerate(headerContent, start = 1):
+#     print(str(index) + ": " + str(i))
+#   print("There are all the list content items: ")
+#   for index, i in enumerate(listItems, start = 1):
+#     print(str(index) + ": " + str(i))
+
+# printItems()
 
