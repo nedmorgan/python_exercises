@@ -1,4 +1,5 @@
 import random
+import re
 
 randomNumber = str(random.randint(1000, 9999))
 print("Welcome to the Cows and Bulls Game!")
@@ -7,9 +8,17 @@ print("Random Number " + randomNumber)
 def inputNumber():
   playerInput = input("Enter a 4 digit number: ")
   if len(playerInput) != 4:
-    playerInput = input("Enter a 4 digit number: ")
-  else:
-    checkNumber(playerInput)
+    if hasLetters(playerInput) == True:
+      print("Please do not input letters")
+      inputNumber()
+    else:
+      inputNumber()
+  elif len(playerInput) == 4:
+    if hasLetters(playerInput) == True:
+      print("Please do not input letters")
+      inputNumber()
+    else:
+      checkNumber(playerInput)
 
 def checkNumber(inputNum):
   num = splitString(inputNum)
@@ -34,6 +43,9 @@ def compare(myNum, computerNum):
 
 def splitString(str):
   return [char for char in str]
+
+def hasLetters(str):
+  return bool(re.match('[a-zA-Z]', str))
 
 inputNumber()
 
